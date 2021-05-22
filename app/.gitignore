@@ -1,1 +1,42 @@
+.DS_Store
+.gradle
+*.iml
+/*.iml
+.idea
+/.idea
+/.idea/copyright
+/.idea/workspace.xml
+/.idea/libraries
+/.idea/vcs.xml
+/*/*/build
 /build
+/captures
+/universe-sdk/build
+/local.properties
+/variant.properties
+*.jks
+exoplayer-library/build
+exoplayer-library/buildout
+fastlane/README.md
+fastlane/report.xml
+*.lock
+
+# Generated files
+bin/
+gen/
+out/
+debug/
+release/
+
+# Gradle files
+.gradle/
+build/
+/trueid-android-application/
+/trueid-android-v3/
+
+# NewRelic
+newrelic.properties
+
+*.hprof
+
+*.exec
