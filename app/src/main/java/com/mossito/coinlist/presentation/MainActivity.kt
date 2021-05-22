@@ -12,6 +12,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initCoinListFragment() {
-
+        val fragment = CoinListFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(android.R.id.content, fragment, CoinListFragment.TAG)
+            .commit()
     }
 }
