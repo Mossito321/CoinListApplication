@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.mossito.coinlist.R
+import com.mossito.coinlist.api.CoinListApi
+import com.mossito.coinlist.data.repository.CoinListDataRepositoryImpl
 import com.mossito.coinlist.databinding.FragmentCoinListBinding
 
 class CoinListFragment : Fragment(R.layout.fragment_coin_list) {
@@ -16,6 +18,7 @@ class CoinListFragment : Fragment(R.layout.fragment_coin_list) {
 
     private var _binding: FragmentCoinListBinding? = null
     private val binding get() = _binding!!
+    private var viewModel: CoinListViewModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,5 +27,20 @@ class CoinListFragment : Fragment(R.layout.fragment_coin_list) {
     ): View? {
         _binding = FragmentCoinListBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        bindViewModel()
+        initView()
+    }
+
+    private fun bindViewModel() {
+        val coinListDataRepository = CoinListDataRepositoryImpl(CoinListApi)
+        viewModel = CoinListViewModel()
+    }
+
+    private fun initView() {
+
     }
 }
