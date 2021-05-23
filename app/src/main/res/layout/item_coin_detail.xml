@@ -38,15 +38,9 @@
         android:maxLines="3"
         android:textColor="@color/detail_text_view"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/guideline2"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/coinImageView"
         app:layout_constraintTop_toBottomOf="@id/coinNameTextView"
         tools:text="testText testText testText testText testText testText testText testText testText testText testText testText testText testText testText testText testText testText " />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="378dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

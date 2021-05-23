@@ -6,11 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.mossito.coinlist.R
 import com.mossito.coinlist.api.CoinListApi
 import com.mossito.coinlist.data.repository.CoinListDataRepositoryImpl
 import com.mossito.coinlist.databinding.FragmentCoinListBinding
+import com.mossito.coinlist.domain.model.CoinDisplayModel
 import com.mossito.coinlist.domain.usecase.LoadCoinDetailUseCaseImpl
+import com.mossito.coinlist.presentation.adapter.CoinListAdapter
 
 class CoinListFragment : Fragment(R.layout.fragment_coin_list) {
 
@@ -21,6 +24,7 @@ class CoinListFragment : Fragment(R.layout.fragment_coin_list) {
     private var _binding: FragmentCoinListBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: CoinListViewModel
+    private lateinit var coinListAdapter: CoinListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,8 +49,8 @@ class CoinListFragment : Fragment(R.layout.fragment_coin_list) {
         viewModel.loadCoinList()
 
         with(viewModel) {
-            coinListToShow().observe(viewLifecycleOwner, {
-                Toast.makeText(context, "Data Coming Soon Boi ${it.first().coinName}.", Toast.LENGTH_LONG).show()
+            coinListToShow().observe(viewLifecycleOwner, { _coinList ->
+                setCoinListData(_coinList)
             })
             showError().observe(viewLifecycleOwner, {
                 Toast.makeText(context, "Cannot Load Coin This Time.", Toast.LENGTH_LONG).show()
@@ -55,6 +59,27 @@ class CoinListFragment : Fragment(R.layout.fragment_coin_list) {
     }
 
     private fun initView() {
+        context?.let { _context ->
+            coinListAdapter = CoinListAdapter()
+            val linearLayoutManager =
+                LinearLayoutManager(_context, LinearLayoutManager.VERTICAL, false)
+            coinListAdapter.let {
+                binding.coinDetailRecyclerView.layoutManager = linearLayoutManager
+                binding.coinDetailRecyclerView.adapter = coinListAdapter
+            }
+        }
+        binding.swipeRefresh.setOnRefreshListener {
+            coinListAdapter.clearCoinItemList()
+            viewModel.loadCoinList()
+        }
+    }
 
+    private fun setCoinListData(coinList: List<CoinDisplayModel>) {
+        binding.swipeRefresh.let { swipeRefreshLayout ->
+            if (swipeRefreshLayout.isRefreshing) {
+                swipeRefreshLayout.isRefreshing = false
+            }
+        }
+        coinListAdapter.setCoinItemList(coinList)
     }
 }
