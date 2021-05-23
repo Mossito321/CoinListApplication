@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Coin List</string>
-    <string name="search_text">ค้นหา</string>
+    <string name="search_text">ค้นหา (by Name)</string>
 </resources>

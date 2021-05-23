@@ -1,6 +1,8 @@
 package com.mossito.coinlist.presentation
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +23,7 @@ class CoinListFragment : Fragment(R.layout.fragment_coin_list) {
         val TAG = CoinListFragment::class.java.canonicalName as String
     }
 
+    private var coinListDetail: List<CoinDisplayModel>? = null
     private var _binding: FragmentCoinListBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: CoinListViewModel
@@ -50,6 +53,7 @@ class CoinListFragment : Fragment(R.layout.fragment_coin_list) {
 
         with(viewModel) {
             coinListToShow().observe(viewLifecycleOwner, { _coinList ->
+                coinListDetail = _coinList
                 setCoinListData(_coinList)
             })
             showError().observe(viewLifecycleOwner, {
@@ -72,6 +76,25 @@ class CoinListFragment : Fragment(R.layout.fragment_coin_list) {
             coinListAdapter.clearCoinItemList()
             viewModel.loadCoinList()
         }
+        binding.searchView.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(editable: Editable?) {
+                binding.searchView.let { searchKeywordText ->
+                    if (editable.toString().isNotEmpty()) {
+                        val searchResult = searchInCoinListData(searchKeywordText.text.toString())
+                        coinListAdapter.setCoinItemList(searchResult)
+                    } else {
+                        coinListDetail?.let { coinListAdapter.setCoinItemList(it) }
+                    }
+                }
+            }
+
+        })
     }
 
     private fun setCoinListData(coinList: List<CoinDisplayModel>) {
@@ -81,5 +104,15 @@ class CoinListFragment : Fragment(R.layout.fragment_coin_list) {
             }
         }
         coinListAdapter.setCoinItemList(coinList)
+    }
+
+    private fun searchInCoinListData(keyword: String): List<CoinDisplayModel> {
+        val tempCoinListModel = mutableListOf<CoinDisplayModel>()
+        coinListDetail?.forEach { coinModel ->
+            if (coinModel.coinName.toLowerCase().contains(keyword.toLowerCase())) {
+                tempCoinListModel.add(coinModel)
+            }
+        }
+        return tempCoinListModel
     }
 }
