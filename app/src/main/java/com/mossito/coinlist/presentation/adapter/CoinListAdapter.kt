@@ -5,8 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mossito.coinlist.databinding.ItemCoinDetailBinding
+import com.mossito.coinlist.databinding.ItemCoinImageBinding
 import com.mossito.coinlist.domain.model.CoinDisplayModel
 import com.mossito.coinlist.presentation.viewholder.CoinDetailViewHolder
+import com.mossito.coinlist.presentation.viewholder.CoinImageViewHolder
 
 class CoinListAdapter : RecyclerView.Adapter<CoinListAdapter.CoinListViewHolder>() {
 
@@ -28,8 +30,8 @@ class CoinListAdapter : RecyclerView.Adapter<CoinListAdapter.CoinListViewHolder>
         val layoutInflater = LayoutInflater.from(parent.context)
         return when (viewType) {
             VIEW_TYPE_ONLY_IMAGE -> {
-                val binding = ItemCoinDetailBinding.inflate(layoutInflater, parent, false)
-                CoinDetailViewHolder(binding)
+                val binding = ItemCoinImageBinding.inflate(layoutInflater, parent, false)
+                CoinImageViewHolder(binding)
             }
             else -> {
                 val binding = ItemCoinDetailBinding.inflate(layoutInflater, parent, false)
@@ -48,7 +50,7 @@ class CoinListAdapter : RecyclerView.Adapter<CoinListAdapter.CoinListViewHolder>
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (position % 5 == 0) {
+        return if ((position + 1) % 5 == 0) {
             VIEW_TYPE_ONLY_IMAGE
         } else {
             VIEW_TYPE_DEFAULT
