@@ -15,6 +15,7 @@ import com.mossito.coinlist.data.repository.CoinListDataRepositoryImpl
 import com.mossito.coinlist.databinding.FragmentCoinListBinding
 import com.mossito.coinlist.domain.model.CoinDisplayModel
 import com.mossito.coinlist.domain.usecase.LoadCoinDetailUseCaseImpl
+import com.mossito.coinlist.domain.usecase.SearchCoinUseCaseImpl
 import com.mossito.coinlist.presentation.adapter.CoinListAdapter
 
 class CoinListFragment : Fragment(R.layout.fragment_coin_list) {
@@ -48,7 +49,12 @@ class CoinListFragment : Fragment(R.layout.fragment_coin_list) {
         val coinListDataRepository = CoinListDataRepositoryImpl(CoinListApi)
         val loadCoinDetailUseCase =
             LoadCoinDetailUseCaseImpl(coinListDataRepository = coinListDataRepository)
-        viewModel = CoinListViewModel(loadCoinDetailUseCase = loadCoinDetailUseCase)
+        val searchCoinUseCase =
+            SearchCoinUseCaseImpl(coinListDataRepository = coinListDataRepository)
+        viewModel = CoinListViewModel(
+            loadCoinDetailUseCase = loadCoinDetailUseCase,
+            searchCoinUseCase = searchCoinUseCase
+        )
         viewModel.loadCoinList()
 
         with(viewModel) {
@@ -86,10 +92,9 @@ class CoinListFragment : Fragment(R.layout.fragment_coin_list) {
             override fun afterTextChanged(editable: Editable?) {
                 binding.searchView.let { searchKeywordText ->
                     if (editable.toString().isNotEmpty()) {
-                        val searchResult = searchInCoinListData(searchKeywordText.text.toString())
-                        coinListAdapter.setCoinItemList(searchResult)
+                        viewModel.searchCoin(searchKeywordText.text.toString())
                     } else {
-                        coinListDetail?.let { coinListAdapter.setCoinItemList(it) }
+                        viewModel.loadCoinList()
                     }
                 }
             }
@@ -104,15 +109,5 @@ class CoinListFragment : Fragment(R.layout.fragment_coin_list) {
             }
         }
         coinListAdapter.setCoinItemList(coinList)
-    }
-
-    private fun searchInCoinListData(keyword: String): List<CoinDisplayModel> {
-        val tempCoinListModel = mutableListOf<CoinDisplayModel>()
-        coinListDetail?.forEach { coinModel ->
-            if (coinModel.coinName.toLowerCase().contains(keyword.toLowerCase())) {
-                tempCoinListModel.add(coinModel)
-            }
-        }
-        return tempCoinListModel
     }
 }
