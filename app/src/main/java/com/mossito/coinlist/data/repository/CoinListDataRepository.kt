@@ -6,10 +6,15 @@ import io.reactivex.Observable
 
 interface CoinListDataRepository {
     fun getCoinList(): Observable<CoinListModel>
+    fun getCoinListWithLimit(offset: Int, limit: Int): Observable<CoinListModel>
 }
 
-class CoinListDataRepositoryImpl(private val api: CoinListApi) : CoinListDataRepository{
+class CoinListDataRepositoryImpl(private val api: CoinListApi) : CoinListDataRepository {
     override fun getCoinList(): Observable<CoinListModel> {
         return api.getCoinList()
+    }
+
+    override fun getCoinListWithLimit(offset: Int, limit: Int): Observable<CoinListModel> {
+        return api.getCoinListWithLimit(offset = offset, limit = limit)
     }
 }

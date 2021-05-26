@@ -67,6 +67,11 @@ class CoinListAdapter : RecyclerView.Adapter<CoinListAdapter.CoinListViewHolder>
         notifyDataSetChanged()
     }
 
+    fun updateCoinItemList(coinList: List<CoinDisplayModel>) {
+        coinItemList.addAll(coinList)
+        notifyDataSetChanged()
+    }
+
     fun clearCoinItemList() {
         coinItemList.clear()
     }
