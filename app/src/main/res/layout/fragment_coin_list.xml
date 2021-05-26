@@ -17,6 +17,7 @@
         android:drawablePadding="15dp"
         android:hint="@string/search_text"
         android:maxLines="1"
+        android:textSize="14sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
